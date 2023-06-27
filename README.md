@@ -27,26 +27,22 @@ This code has been developed by Arm_710
 
 Commands are now simplified by using the / key where you will be presented with a menu to select a command.
 
-
-   '`!lookup [name]`: Look up a Space Addict character by name or shop item\n'
    
    '`/comic`: Pre-release comic information\n'
    
    '`/yurrogm`: Will provide you instructions to upload an image and then be presented with a menu to modify the image with an overlay ( these are role base permissioned )\n'
    
-   '`!comicpass`: Latest Comic information\n'
-   
    '`/links`: Display Official Links\n'
    
    '`/about`: Display information about Space Addicts\n'
    
-   '`/yurroall`: Will show you all the characters in Space Addicts, Rons Tacklebox \n'
+   '`/allcharacters`: Will show you all the characters in Space Addicts, Rons Tacklebox \n'
 
    '`/searchrecords`: Will show a list of options "name_of_spaceaddict" "name_of_rontacklebox" "select_this_and_type_random" \n'
 
-   '`!lookupnft`: select "lookup_this_number" then type a number, this will display all traits and image for that Space Addict NFT\n'
+   '`/lookupnft`: select "lookup_this_number" then type a number, this will display all traits and image for that Space Addict NFT\n'
 
-   '`!yurrostats`: Display server information and channel stats\n'
+   '`/yurrostats`: Display server information and channel stats\n'
    
 
 ---
