@@ -43,6 +43,8 @@ Commands are now simplified by using the / key where you will be presented with 
    '`/lookupnft`: select "lookup_this_number" then type a number, this will display all traits and image for that Space Addict NFT\n'
 
    '`/yurrostats`: Display server information and channel stats\n'
+
+   '`/seen`: Recall last known message from user in the server\n'
    
 
 ---
