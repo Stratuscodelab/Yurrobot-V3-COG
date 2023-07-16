@@ -21,6 +21,7 @@ async def on_ready():
     await bot.load_extension('cogs.about') # Load the yurrogm cog
     await bot.load_extension('cogs.comic') # Load the yurrogm cog
     await bot.load_extension('cogs.space') # Load the yurrogm cog
+    await bot.load_extension('seen.space') # Load the yurrogm cog
 
 
 
