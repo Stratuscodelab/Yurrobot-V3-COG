@@ -12,16 +12,16 @@ bot = commands.Bot(command_prefix="/", intents=intents)
 async def on_ready():
     print(f"Logged in as {bot.user.name} ({bot.user.id})")
     print("------")
-    await bot.load_extension('cogs.links') # Load the yurrogm cog
-    await bot.load_extension('cogs.searchrecords') # Load the yurrogm cog
-    await bot.load_extension('cogs.yurrogm') # Load the yurrogm cog
-    await bot.load_extension('cogs.lookupnft') # Load the yurrogm cog
-    await bot.load_extension('cogs.yurrostats') # Load the yurrogm cog
-    await bot.load_extension('cogs.allcharacters') # Load the yurrogm cog
-    await bot.load_extension('cogs.about') # Load the yurrogm cog
-    await bot.load_extension('cogs.comic') # Load the yurrogm cog
-    await bot.load_extension('cogs.space') # Load the yurrogm cog
-    await bot.load_extension('seen.space') # Load the yurrogm cog
+    await bot.load_extension('cogs.links') # Load the cog
+    await bot.load_extension('cogs.searchrecords') # Load the cog
+    await bot.load_extension('cogs.yurrogm') # Load the cog
+    await bot.load_extension('cogs.lookupnft') # Load the cog
+    await bot.load_extension('cogs.yurrostats') # Load the cog
+    await bot.load_extension('cogs.allcharacters') # Load the cog
+    await bot.load_extension('cogs.about') # Load the cog
+    await bot.load_extension('cogs.comic') # Load the cog
+    await bot.load_extension('cogs.space') # Load the cog
+    await bot.load_extension('seen.space') # Load the cog
 
 
 
