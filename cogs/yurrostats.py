@@ -54,6 +54,10 @@ class yurrostats(commands.Cog):
         num_records2 = c.fetchone()[0]
         c.execute("SELECT COUNT(*) FROM shop")
         num_records3 = c.fetchone()[0]
+        c.execute("SELECT COUNT(*) FROM MemoryProtocol")
+        num_records4 = c.fetchone()[0]
+        c.execute("SELECT COUNT(*) FROM burned")
+        num_records5 = c.fetchone()[0]
 
         # Server information
         total_users = len(set(interaction.guild.members))
@@ -85,7 +89,7 @@ class yurrostats(commands.Cog):
         dmlog_size_mb = convert_bytes_to_megabytes(dmlog_size_bytes)
 
         # Version number
-        version_num = "3.0 - Cog - 2023"
+        version_num = "3.2 - Cog - 2023- MemoryProtocol Initiated"
 
         # Build server stats and bot stats strings
         server_stats = (
@@ -94,6 +98,8 @@ class yurrostats(commands.Cog):
             f"Number of SA Database Records: {num_records}\n"
             f"Number of Ron Tacklebox Database Records: {num_records2}\n"
             f"Number of Shop Database Records: {num_records3}\n"
+            f"Number of Memory Protocol Characters: {num_records4}\n"
+            f"Number of Burned Space Addicts: {num_records5}\n"
             f"Yurromeme Directory Size: {yurromeme_size_mb:.2f} MB\n"
             f"DMlog Directory Size: {dmlog_size_mb:.2f} MB"
         )
