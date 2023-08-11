@@ -15,7 +15,7 @@ intents = discord.Intents.all()
 intents.messages = True
 start_time = datetime.datetime.utcnow()
 
-conn = sqlite3.connect('viperdevmac.db')
+conn = sqlite3.connect('database.db')
 c = conn.cursor()
 
 bot = commands.Bot(command_prefix="/", intents=intents)
