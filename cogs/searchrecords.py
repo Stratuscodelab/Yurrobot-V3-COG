@@ -7,6 +7,7 @@ import random
 import json
 from discord import app_commands
 import asyncio
+import requests
 
 intents = discord.Intents.all()
 intents.messages = True
@@ -14,7 +15,7 @@ intents.messages = True
 bot = commands.Bot(command_prefix="/", intents=intents)
 
 
-connection = sqlite3.connect('viperdevmac.db')
+connection = sqlite3.connect('databasehere.db')
 c = connection.cursor()
 
 
@@ -22,27 +23,31 @@ class searchrecords(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @bot.tree.command(name="searchrecords", description="Lookup any SpaceAddict by name",)
+    @bot.tree.command(name="newsearchrecords", description="Lookup any SpaceAddict by name",)
    # @app_commands.describe(name_of_subject =  "What name should i look up ?")
-    async def searchrecords(self, interaction: discord.Interaction, name_of_spaceaddict: str = None, name_of_rontacklebox: str = None, select_this_and_type_random: str = None):
+    async def searchrecords(self, interaction: discord.Interaction, name_of_spaceaddict: str = None, name_of_rontacklebox: str = None, select_this_and_type_random: str = None, name_of_memoryprotocol: str = None,):
         if select_this_and_type_random is not None and select_this_and_type_random.lower() == "random":
             # Check if either table has records
             c.execute("SELECT COUNT(*) FROM spaceaddicts")
             spaceaddicts_count = c.fetchone()[0]
             c.execute("SELECT COUNT(*) FROM ront")
             ront_count = c.fetchone()[0]
+            c.execute("SELECT COUNT(*) FROM MemoryProtocol")
+            MemoryProtocol_count = c.fetchone()[0]
 
-            if spaceaddicts_count == 0 and ront_count == 0:
+            if spaceaddicts_count == 0 and ront_count == 0 and MemoryProtocol_count ==0:
                 await interaction.response.send_message("No records found in the database.")
                 return
 
             # Select a random table
-            table = random.choice(["spaceaddicts", "ront"])
+            table = random.choice(["spaceaddicts", "ront", "MemoryProtocol"])
 
             if table == "spaceaddicts":
                 c.execute("SELECT * FROM spaceaddicts")
-            else:
+            elif table == "ront":
                 c.execute("SELECT * FROM ront")
+            else:
+                c.execute("SELECT * FROM MemoryProtocol")
 
             all_results = c.fetchall()
 
@@ -62,7 +67,7 @@ class searchrecords(commands.Cog):
                 with Image.open(image_path) as img:
                     img.thumbnail((300, 300))
                     with io.BytesIO() as output:
-                        img.save(output, format="JPEG")
+                        img.convert("RGB").save(output, format="JPEG")
                         image_data = output.getvalue()
                 embed.set_image(url="attachment://thumbnail.png")
                 embed.set_thumbnail(url="attachment://logoclear.png")
@@ -209,7 +214,70 @@ class searchrecords(commands.Cog):
                     message_content += "\nPlease refine your search."
                     await interaction.response.send_message(message_content)
                 else:
-                    
                     pass
+                
+        if name_of_memoryprotocol is not None:
+            name = name_of_memoryprotocol.lower()
+            c.execute("SELECT * FROM MemoryProtocol WHERE LOWER(name) = ?", (name,))
+            result = c.fetchone()
+            table_name = "MemoryProtocol"
+
+        if result:
+            # If the image is a URL, fetch it from the link
+            if len(result) > 2:
+                image_link = result[2]
+                if image_link.startswith("http"):
+                    response = requests.get(image_link)
+                    if response.status_code == 200:
+                        # Open the image with PIL and create an embed
+                        with Image.open(io.BytesIO(response.content)) as img:
+                            img = img.convert("RGB")  # Convert the image mode to RGB
+                            img.thumbnail((300, 300))
+                            with io.BytesIO() as output:
+                                img.save(output, format="JPEG")
+                                image_data = output.getvalue()
+                    else:
+                        await interaction.response.send_message("Failed to fetch the image from the provided URL.")
+                        return
+                else:
+                    # If the image is not a URL, treat it as a local file path and continue as before
+                    with open(image_link, 'rb') as f:
+                        image_file = discord.File(f)
+
+                # Create the embed
+                embed = discord.Embed(
+                    title=result[0],
+                    description=result[1],
+                    color=discord.Color.teal()
+                )
+                embed.set_image(url="attachment://thumbnail.png")
+                embed.set_thumbnail(url="attachment://logoclear.png")
+                #embed.add_field(name="Title", value=result[1], inline=False)
+                embed.set_footer(text="Learn more here: Spaceaddicts.io")
+
+                await interaction.response.send_message(
+                    embed=embed,
+                    files=[
+                        discord.File(io.BytesIO(image_data), filename='thumbnail.png') if image_link.startswith("http") else image_file,
+                        discord.File("logoclear.png", filename='logoclear.png')
+                    ]
+                )
+            else:
+                # Execute a SELECT statement using LIKE to search for similar items
+                c.execute("SELECT * FROM MemoryProtocol WHERE LOWER(name) LIKE ?", (f'%{name}%',))
+                results = c.fetchall()
+
+                # If multiple results are found, suggest them to the user
+                if results:
+                    message_content = "Multiple items found..."
+                    for r in results:
+                        message_content += f"\n- {r[0]} ({r[4]})"
+                    message_content += "\nPlease refine your search."
+                    await interaction.response.send_message(message_content)
+                else:
+                    pass
+                    
+           
+                
 async def setup(bot):
     await bot.add_cog(searchrecords(bot))
